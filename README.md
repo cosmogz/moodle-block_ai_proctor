@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # AI Proctor - AI-Powered Exam Monitoring for Moodle
 
 AI Proctor provides comprehensive exam monitoring and academic integrity tools for Moodle using advanced computer vision and AI technology.
@@ -36,7 +35,7 @@ Some core AI model and WASM files are proprietary and distributed only via the o
 GNU GPL v3 or later. See LICENSE.txt for details.
 
 ## Copyright
-Copyright (C) 2024-2026 Medwax Corporation Africa Ltd.
+Copyright (C) 2026 Medwax Corporation Africa Ltd.
 =======
 # AI_PROCTOR
->>>>>>> d4be85ef27c212127a1318ad318f961f7c69eb09
+d4be85ef27c212127a1318ad318f961f7c69eb09
