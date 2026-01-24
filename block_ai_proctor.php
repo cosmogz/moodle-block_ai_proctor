@@ -104,7 +104,7 @@ class block_ai_proctor extends block_base {
     <div style="text-align:center;">
         <form action="<?php echo $report_url; ?>" method="get" target="_blank">
             <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
-            <button type="submit" class="btn" style="width:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';">📊 Command Center</button>
+            <button type="submit" class="btn" style="width:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';">Command Center</button>
         </form>
     </div>
 <?php else: ?>
@@ -1408,8 +1408,8 @@ class block_ai_proctor extends block_base {
             updateStep(2, "✅", "Browser compatible", 30);
             
             // STEP 3: Request Camera
-            updateStep(3, "📹", "Requesting camera access - CLICK ALLOW!", 35);
-            status.innerText = "📹 Requesting camera... Please click ALLOW";
+            updateStep(3, "", "Requesting camera access - CLICK ALLOW!", 35);
+            status.innerText = "Requesting camera... Please click ALLOW";
             document.getElementById("shield-footer-text").innerText = "Waiting for camera permission...";
             
             const stream = await navigator.mediaDevices.getUserMedia({ 
@@ -1461,7 +1461,7 @@ class block_ai_proctor extends block_base {
             updateStep(5, "✅", "AI framework ready", 75);
             
             // STEP 6: Initialize Face Detection
-            updateStep(6, "🤖", "Initializing face detection AI...", 80);
+            updateStep(6, "", "Initializing face detection AI...", 80);
             status.innerText = "Initializing face detection...";
             
             faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
@@ -1484,7 +1484,7 @@ class block_ai_proctor extends block_base {
             
             // STEP 7: Environment Scan
             updateStep(7, "🔍", "Environment scan required - Turn slowly 360°", 90);
-            status.innerText = "📹 Scan your environment by turning slowly 360°";
+            status.innerText = "Scan your environment by turning slowly 360°";
             document.getElementById("shield-footer-text").innerText = "Environment verification required...";
             
             await performEnvironmentScan();
@@ -1877,7 +1877,7 @@ class block_ai_proctor extends block_base {
             "Talking": {
                 message: "Verbal communication detected during exam",
                 instructions: [
-                    "🤐 Close your mouth - no talking allowed",
+                    "Close your mouth - no talking allowed",
                     "🔇 Maintain complete silence",
                     "📵 Ensure no other person is in the room",
                     "⚠️ Repeated talking will result in exam suspension"
@@ -1886,7 +1886,7 @@ class block_ai_proctor extends block_base {
             "No Face": {
                 message: "Your face is not visible in the camera",
                 instructions: [
-                    "📹 Position yourself in front of the camera",
+                    "Position yourself in front of the camera",
                     "💡 Ensure adequate lighting on your face",
                     "🪟 Remove any objects blocking the camera",
                     "✅ Your face must be fully visible at all times"
@@ -1944,7 +1944,7 @@ class block_ai_proctor extends block_base {
             sessionStorage.setItem(CONFIG.count_key, violationTotal);
             document.getElementById("header-strikes").innerText = violationTotal;
             
-            logViolationToHUD("🎥 EVIDENCE CAPTURED: " + violationType + " - Video clip recorded");
+            logViolationToHUD("EVIDENCE CAPTURED: " + violationType + " - Video clip recorded");
             
             // Disable strict mode after evidence collection (give student benefit of doubt)
             if (isStrictMode && violationTotal < 5) {
@@ -2010,7 +2010,7 @@ class block_ai_proctor extends block_base {
         };
         
         videoRecorder.start();
-        logViolationToHUD("🎥 Recording " + (hasAudio ? "video+audio" : "video") + "...");
+        logViolationToHUD("Recording " + (hasAudio ? "video+audio" : "video") + "...");
         
         // Record for 5 seconds
         setTimeout(() => {

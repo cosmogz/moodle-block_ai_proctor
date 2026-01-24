@@ -87,7 +87,7 @@ Feature: AI Proctor Reports and Analytics
     When I log in as "student1"
     And I am on "Course 1" course homepage
     Then I should not see "Command Center" in the "AI Exam Proctor" "block"
-    And I should not see "📊 Command Center" in the page
+    And I should not see "Command Center" in the page
 
   @block_ai_proctor_realtime_monitoring
   Scenario: Reports show real-time activity

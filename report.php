@@ -255,7 +255,7 @@ echo $OUTPUT->header();
                             <input type="hidden" name="target" value="<?php echo $student->id; ?>">
                             <input type="hidden" name="courseid" value="<?php echo $courseid; ?>">
                             <input type="hidden" name="sesskey" value="<?php echo sesskey(); ?>">
-                            <button type="submit" class="btn btn-sm btn-modern btn-modern-danger" onclick="return confirm('🚨 DISQUALIFY STUDENT?\n\nThis will block all future uploads and mark the student for review.\n\nContinue?')">💀 Disqualify</button>
+                            <button type="submit" class="btn btn-sm btn-modern btn-modern-danger" onclick="return confirm('DISQUALIFY STUDENT?\n\nThis will block all future uploads and mark the student for review.\n\nContinue?')">Disqualify</button>
                         </form>
                     </div>
                 </div>
