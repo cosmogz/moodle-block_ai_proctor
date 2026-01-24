@@ -1,0 +1,5 @@
+# Exclude proprietary AI model and WASM files
+model/
+wasm/
+*.task
+*.js
