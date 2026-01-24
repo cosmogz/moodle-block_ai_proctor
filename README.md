@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # AI Proctor - AI-Powered Exam Monitoring for Moodle
 
 AI Proctor provides comprehensive exam monitoring and academic integrity tools for Moodle using advanced computer vision and AI technology.
