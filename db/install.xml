@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<XMLDB PATH="blocks/ai_proctor/db" VERSION="2025012202" COMMENT="XMLDB file for Moodle block_ai_proctor"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd"
+>
+  <TABLES>
+    <TABLE NAME="block_ai_proctor" COMMENT="AI Proctor evidence and violations storage">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course ID where violation occurred"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User ID of the monitored student"/>
+        <FIELD NAME="violation_type" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Type of violation: Looking Down, Turning Left, etc"/>
+        <FIELD NAME="evidence_type" TYPE="char" LENGTH="30" NOTNULL="false" SEQUENCE="false" COMMENT="Type of evidence: image, video, audio"/>
+        <FIELD NAME="evidence_data" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Base64-encoded image or video data"/>
+        <FIELD NAME="file_path" TYPE="char" LENGTH="500" NOTNULL="false" SEQUENCE="false" COMMENT="Server file path for large evidence files"/>
+        <FIELD NAME="file_size" TYPE="int" LENGTH="15" NOTNULL="false" SEQUENCE="false" COMMENT="File size in bytes"/>
+        <FIELD NAME="ai_confidence" TYPE="number" LENGTH="5" DECIMALS="2" NOTNULL="false" SEQUENCE="false" COMMENT="AI confidence level 0-100%"/>
+        <FIELD NAME="session_id" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Session identifier linking related evidence"/>
+        <FIELD NAME="ip_address" TYPE="char" LENGTH="45" NOTNULL="false" SEQUENCE="false" COMMENT="IP address for security tracking"/>
+        <FIELD NAME="user_agent" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Browser and device information"/>
+        <FIELD NAME="timestamp" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Unix timestamp when violation was detected"/>
+        <FIELD NAME="severity" TYPE="char" LENGTH="20" NOTNULL="false" SEQUENCE="false" COMMENT="Severity level: low, medium, high, critical"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="20" NOTNULL="true" DEFAULT="active" SEQUENCE="false" COMMENT="Status: active, reviewed, dismissed, escalated"/>
+        <FIELD NAME="reviewed_by" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Teacher/admin who reviewed"/>
+        <FIELD NAME="review_notes" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Review notes from instructor"/>
+        <FIELD NAME="timereviewed" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when evidence was reviewed"/>
+        
+        <!-- Legacy support for existing installations -->
+        <FIELD NAME="imagedata" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="Legacy: Base64 image data"/>
+        <FIELD NAME="message" TYPE="char" LENGTH="255" NOTNULL="false" SEQUENCE="false" COMMENT="Legacy: Violation message"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid_fk" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+        <KEY NAME="reviewed_by_fk" TYPE="foreign" FIELDS="reviewed_by" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course_user_idx" UNIQUE="false" FIELDS="courseid,userid" COMMENT="Find violations by course and user"/>
+        <INDEX NAME="course_status_idx" UNIQUE="false" FIELDS="courseid,status" COMMENT="Find violations by course and status"/>
+        <INDEX NAME="severity_time_idx" UNIQUE="false" FIELDS="severity,timestamp" COMMENT="Sort by severity and time"/>
+        <INDEX NAME="user_time_idx" UNIQUE="false" FIELDS="userid,timestamp" COMMENT="User violation timeline"/>
+        <INDEX NAME="session_idx" UNIQUE="false" FIELDS="session_id" COMMENT="Group evidence by session"/>
+        <INDEX NAME="violation_type_idx" UNIQUE="false" FIELDS="violation_type,timestamp" COMMENT="Analyze violation patterns"/>
+      </INDEXES>
+    </TABLE>
+    
+    <TABLE NAME="block_ai_proctor_config" COMMENT="User and course-specific configuration settings">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course where settings apply"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="User-specific settings (NULL for course defaults)"/>
+        <FIELD NAME="setting_name" TYPE="char" LENGTH="100" NOTNULL="true" SEQUENCE="false" COMMENT="Configuration setting name"/>
+        <FIELD NAME="setting_value" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="JSON or text configuration value"/>
+        <FIELD NAME="created_at" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Timestamp when setting was created"/>
+        <FIELD NAME="updated_at" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Timestamp when setting was last modified"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid_fk" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="course_setting_idx" UNIQUE="false" FIELDS="courseid,setting_name" COMMENT="Lookup course settings"/>
+        <INDEX NAME="user_setting_idx" UNIQUE="false" FIELDS="userid,courseid,setting_name" COMMENT="Lookup user-specific settings"/>
+        <INDEX NAME="course_user_unique_idx" UNIQUE="true" FIELDS="courseid,userid,setting_name" COMMENT="Prevent duplicate user settings"/>
+      </INDEXES>
+    </TABLE>
+    
+    <TABLE NAME="block_ai_proctor_sessions" COMMENT="Complete monitoring session records">
+      <FIELDS>
+        <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
+        <FIELD NAME="courseid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Course where monitoring occurred"/>
+        <FIELD NAME="userid" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="User being monitored"/>
+        <FIELD NAME="session_id" TYPE="char" LENGTH="255" NOTNULL="true" SEQUENCE="false" COMMENT="Unique session identifier"/>
+        <FIELD NAME="starttime" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Session start timestamp"/>
+        <FIELD NAME="endtime" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Session end timestamp"/>
+        <FIELD NAME="duration" TYPE="int" LENGTH="10" NOTNULL="false" SEQUENCE="false" COMMENT="Total session duration in seconds"/>
+        <FIELD NAME="violationcount" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Total violations detected"/>
+        <FIELD NAME="evidencecount" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false" COMMENT="Total evidence files captured"/>
+        <FIELD NAME="status" TYPE="char" LENGTH="30" NOTNULL="true" DEFAULT="active" SEQUENCE="false" COMMENT="Session status: active, completed, terminated, suspended"/>
+        <FIELD NAME="systeminfo" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="JSON: browser, device, IP, etc."/>
+        <FIELD NAME="finaldata" TYPE="text" NOTNULL="false" SEQUENCE="false" COMMENT="JSON: final metrics, suspicion levels, analysis"/>
+        <FIELD NAME="last_activity" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="false" COMMENT="Last activity timestamp for cleanup"/>
+      </FIELDS>
+      <KEYS>
+        <KEY NAME="primary" TYPE="primary" FIELDS="id"/>
+        <KEY NAME="courseid_fk" TYPE="foreign" FIELDS="courseid" REFTABLE="course" REFFIELDS="id"/>
+        <KEY NAME="userid_fk" TYPE="foreign" FIELDS="userid" REFTABLE="user" REFFIELDS="id"/>
+      </KEYS>
+      <INDEXES>
+        <INDEX NAME="session_id_idx" UNIQUE="true" FIELDS="session_id" COMMENT="Unique session lookup"/>
+        <INDEX NAME="course_user_idx" UNIQUE="false" FIELDS="courseid,userid" COMMENT="Find user sessions in course"/>
+        <INDEX NAME="course_status_idx" UNIQUE="false" FIELDS="courseid,status" COMMENT="Find sessions by status"/>
+        <INDEX NAME="user_time_idx" UNIQUE="false" FIELDS="userid,starttime" COMMENT="User session timeline"/>
+        <INDEX NAME="last_activity_idx" UNIQUE="false" FIELDS="last_activity" COMMENT="Session cleanup by activity"/>
+        <INDEX NAME="violation_count_idx" UNIQUE="false" FIELDS="violationcount" COMMENT="Sessions by violation count"/>
+      </INDEXES>
+    </TABLE>
+  </TABLES>
+</XMLDB>
