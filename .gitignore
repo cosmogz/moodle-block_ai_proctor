@@ -1,5 +1,35 @@
-# Exclude proprietary AI model and WASM files
+# Exclude proprietary and sensitive files from GitHub
 model/
 wasm/
 *.task
+*.wasm
 *.js
+# Exclude commercial, cloud, and business docs
+commercial/
+ai_proctor_cloud/
+backup/
+API_ARCHITECTURE_EXPLAINED.md
+BUSINESS_STRATEGY.md
+CLEANUP_SUMMARY.md
+CLOUD_RUN_DEPLOYMENT_GUIDE.md
+CODE_PROTECTION_GUIDE.md
+COMPANY.md
+COMPLETE_BUILD_SUMMARY.md
+COMPONENT_DISTRIBUTION_PLAN.md
+DEPLOYMENT_GUIDE.md
+DISTRIBUTED_DEPLOYMENT_STRATEGY.md
+GOOGLE_CLOUD_ANALYSIS.md
+HONEST_FEATURE_AUDIT.md
+INSTALLATION_COMMERCIAL.md
+MOODLE_MARKETPLACE_SUBMISSION.md
+OWNER_CONTROL_SYSTEM.md
+PRICING_STRATEGY.md
+SERVER_SCALING_STRATEGY.md
+README_MARKETPLACE.md
+LICENSE_COMMERCIAL.md
+*.ps1
+*.sh
+*.exe
+*.yaml
+*.html
+*.md~
