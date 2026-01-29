@@ -7,7 +7,8 @@ Version 2.0.0 | Moodle 4.0+ | License: GPL-3.0
 
 ## Overview
 
-AI Proctor is a professional exam monitoring solution for Moodle, utilizing advanced AI for real-time facial recognition and behavior analysis to support academic integrity.
+AI Proctor is a professional exam monitoring solution for Moodle, utilizing advanced AI for real-time facial recognition 
+and behavior analysis to support academic integrity.
 
 ## Features
 
@@ -35,15 +36,19 @@ AI Proctor is a professional exam monitoring solution for Moodle, utilizing adva
 
 ## Configuration
 
-After installation, configure plugin settings in Site Administration → Plugins → Blocks → AI Proctor. Options include violation thresholds, evidence retention, warning grace period, upload cooldown, video size limits, detection sensitivity, auto-ban, and notifications.
+After installation, configure plugin settings in Site Administration → Plugins → Blocks → AI Proctor. Options include 
+violation thresholds, evidence retention, warning grace period, upload cooldown, video size limits, 
+detection sensitivity, auto-ban, and notifications.
 
 ## Usage
 
-Add the AI Proctor block to a course and configure monitoring settings. Students will be prompted to enable their webcam during quizzes. Teachers can review violation reports and evidence in the block dashboard.
+Add the AI Proctor block to a course and configure monitoring settings. Students will be prompted to enable their 
+webcam during quizzes. Teachers can review violation reports and evidence in the block dashboard.
 
 ## Database Table
 
-The plugin creates the `mdl_block_ai_proctor` table for evidence and violation tracking. Fields include student ID, course ID, violation type, evidence path, evidence type, duration, severity, status, timestamps, and teacher notes.
+The plugin creates the `mdl_block_ai_proctor` table for evidence and violation tracking. Fields include student ID, course ID, 
+violation type, evidence path, evidence type, duration, severity, status, timestamps, and teacher notes.
 
 ## Security and Privacy
 
@@ -74,13 +79,14 @@ GNU GPL v3.0 or later. See LICENSE.txt for details.
 Company: Medwax Corporation Africa Ltd.
 Email: medwaxcorpafrica@outlook.com
 Phone: +254702960969
-GitHub Issues: https://github.com/cosmogz/AI_PROCTOR/issues
+GitHub Issues: https://github.com/cosmogz/moodle-block_ai_proctor/issues
 
 ## Copyright
 
 © 2024-2026 Medwax Corporation Africa Ltd.  
 Affiliated Institution: Kabarak University, Kenya
 
-**Note:** Proprietary AI model and WASM files are distributed only via the official plugin ZIP and are not included in this public repository.
+**Note:** Proprietary AI model and WASM files are distributed only via the official plugin ZIP and 
+are not included in this public repository.
 
 git push -u origin main
