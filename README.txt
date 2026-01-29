@@ -44,7 +44,7 @@ https://github.com/your-repo/ai-proctor
 SUPPORT
 -------
 For issues and questions:
-- GitHub Issues: https://github.com/your-repo/ai-proctor/issues
+- GitHub Issues: https://github.com/your-repo/moodle-block_ai_proctor/issues
 - Moodle Forums: https://moodle.org/plugins/
 
 LICENSE
