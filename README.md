@@ -88,5 +88,3 @@ Affiliated Institution: Kabarak University, Kenya
 
 **Note:** Proprietary AI model and WASM files are distributed only via the official plugin ZIP and 
 are not included in this public repository.
-
-git push -u origin main
