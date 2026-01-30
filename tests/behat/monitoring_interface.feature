@@ -99,3 +99,4 @@ Feature: AI Proctor Monitoring and Evidence
     And I should see elements with CSS selector "#header-strikes"
     And I should see "Strikes:" in the page
     And I should see "/5" in the page
+    

@@ -93,3 +93,4 @@ Feature: AI Proctor Privacy and GDPR Compliance
     Then AI Proctor evidence should be anonymized
     And violation patterns should be preserved for research
     And personal identifiers should be removed
+    

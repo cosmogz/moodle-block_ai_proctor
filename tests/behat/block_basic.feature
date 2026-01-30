@@ -88,3 +88,4 @@ Feature: AI Proctor Block Basic Functionality
     And I turn editing mode on
     When I open the blocks action menu
     Then I should not see "AI Exam Proctor" in the "Add a block..." "select"
+    
