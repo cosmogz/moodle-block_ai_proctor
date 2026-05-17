@@ -88,3 +88,38 @@ Affiliated Institution: Kabarak University, Kenya
 
 **Note:** Proprietary AI model and WASM files are distributed only via the official plugin ZIP and 
 are not included in this public repository.
+
+## Development Milestones (Open Issues)
+
+To efficiently address technical debt and improve the plugin's architecture, the following open issues have been grouped into logical milestones:
+
+### Milestone 1: Code Quality & Standards
+Focuses on basic PHP/Moodle coding standards and file structure.
+- Missing Header and Copyright Information in Files (Issue #2)
+- Closing PHP tags (Issue #11)
+- PHP code issues (Issue #6)
+- Namespace collisions (Issue #9)
+- Deprecated constants (Issue #4)
+
+### Milestone 2: Internationalization & Localization
+Ensures the plugin is fully translatable and follows Moodle string conventions.
+- Hard-coded language strings (Issue #7)
+- Missing language strings (Issue #10)
+
+### Milestone 3: Moodle API Integration & Architecture
+Replaces raw or custom implementations with standard Moodle APIs.
+- Use Moodle File API for File Management (Issue #16)
+- Transition to Templates and Output API (Issue #5)
+- The Privacy Provider is not implemented (Issue #15)
+- Missing cron tasks implementation (Issue #13)
+
+### Milestone 4: Frontend & Styling Modernization
+Updates the browser-side code to modern Moodle standards.
+- Update JS implementation to ES6 JavaScript Modules (Issue #14)
+- Plugin CSS selectors are not sufficiently namespaced (Issue #8)
+
+### Milestone 5: Database & DevOps Setup
+Addresses database stability, deployment, and testing workflows.
+- DB Error (Issue #3)
+- SQL dump in the plugin archive (Issue #12)
+- Consider Adding GitHub Actions Support – It's Free and Highly Useful (Issue #1)
