@@ -241,10 +241,7 @@ class block_ai_proctor extends block_base {
 </div>
 
 <div id="ai-proctor-config" style="display:none;" data-course_id="<?php echo $course_id; ?>" data-sess_key="<?php echo $sesskey; ?>" data-upload_url="<?php echo $upload_url; ?>" data-verified_key="<?php echo $verified_key; ?>" data-count_key="<?php echo $count_key; ?>" data-institution_code="<?php echo get_config('block_ai_proctor', 'institution_code'); ?>" data-analytics_enabled="<?php echo get_config('block_ai_proctor', 'analytics_enabled') ? 'true' : 'false'; ?>" data-user_id="<?php echo $USER->id; ?>"></div>
-<script type="module">
-import { init } from './amd/src/proctor.js';
-init();
-</script>
+<?php $PAGE->requires->js_call_amd('block_ai_proctor/proctor', 'init'); ?>
 
 <?php endif; ?>
 
