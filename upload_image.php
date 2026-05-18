@@ -33,7 +33,7 @@ try {
     debug_log("Session key validation failed: " . $e->getMessage());
     http_response_code(403);
     echo json_encode(['error' => 'Invalid session - page may have expired. Please refresh.', 'code' => 'INVALID_SESSKEY']);
-    exit;
+    die();
 }
 
 // Rate limiting - prevent upload spam
@@ -45,7 +45,7 @@ if ((time() - $last_upload_time) < $min_interval) {
     debug_log("Rate limit exceeded for user " . $USER->id);
     http_response_code(429);
     echo json_encode(['error' => 'Rate limit exceeded', 'retry_after' => $min_interval, 'code' => 'RATE_LIMIT']);
-    exit;
+    die();
 }
 
 set_user_preference($rate_limit_key, time());
@@ -61,14 +61,14 @@ if ($json_error !== JSON_ERROR_NONE) {
     debug_log("JSON decode error: " . json_last_error_msg());
     http_response_code(400);
     echo json_encode(['error' => 'Invalid JSON data: ' . json_last_error_msg(), 'code' => 'JSON_ERROR']);
-    exit;
+    die();
 }
 
 if (!$data || !isset($data['courseid']) || !isset($data['sesskey']) || !isset($data['batch_data'])) {
     debug_log("Missing required fields in request");
     http_response_code(400);
     echo json_encode(['error' => 'Missing required fields (courseid, sesskey, batch_data)', 'code' => 'MISSING_FIELDS']);
-    exit;
+    die();
 }
 
 $courseid = clean_param($data['courseid'], PARAM_INT);
@@ -81,7 +81,7 @@ if ($sesskey_sent !== sesskey()) {
     debug_log("Session key mismatch. Sent: {$sesskey_sent}, Expected: " . sesskey());
     http_response_code(403);
     echo json_encode(['error' => 'Session key mismatch - please refresh page', 'code' => 'SESSKEY_MISMATCH']);
-    exit;
+    die();
 }
 
 // Verify user is enrolled in course
@@ -90,7 +90,7 @@ if (!is_enrolled($context, $USER)) {
     debug_log("User {$USER->id} not enrolled in course {$courseid}");
     http_response_code(403);
     echo json_encode(['error' => 'Not enrolled in course', 'code' => 'NOT_ENROLLED']);
-    exit;
+    die();
 }
 
 // Check if student is banned from this course
@@ -104,20 +104,18 @@ if ($banned) {
     debug_log("User {$USER->id} is banned from course {$courseid}");
     http_response_code(403);
     echo json_encode(['error' => 'Access denied - Account suspended for this course', 'code' => 'USER_BANNED']);
-    exit;
+    die();
 }
 
-// Prepare secure storage folder
-$evidence_folder = $CFG->dataroot . '/ai_proctor_evidence/';
-if (!file_exists($evidence_folder)) {
-    debug_log("Creating evidence folder: {$evidence_folder}");
-    if (!mkdir($evidence_folder, 0755, true)) {
-        debug_log("Failed to create evidence folder");
-        http_response_code(500);
-        echo json_encode(['error' => 'Storage initialization failed', 'code' => 'STORAGE_INIT_FAILED']);
-        exit;
-    }
-}
+// Setup File API components
+$fs = get_file_storage();
+$file_record = array(
+    'contextid' => $context->id,
+    'component' => 'block_ai_proctor',
+    'filearea'  => 'evidence',
+    'itemid'    => 0, // General evidence files (can map to DB ID if needed)
+    'filepath'  => '/',
+);
 
 // Process evidence batch
 $uploaded_count = 0;
@@ -166,19 +164,16 @@ foreach ($data['batch_data'] as $index => $evidence) {
                 }
                 
                 $filename = 'v_' . $courseid . '_' . $USER->id . '_' . time() . '_' . uniqid() . '.webm';
-                $filepath = $evidence_folder . $filename;
                 
-                if (file_put_contents($filepath, $video_binary) === false) {
-                    debug_log("Failed to save video file");
-                    $errors[] = "Failed to save video";
-                    continue;
-                }
+                // Moodle File API
+                $file_record['filename'] = $filename;
+                $fs->create_file_from_string($file_record, $video_binary);
                 
                 $record->evidence_path = $filename;
                 $record->evidence_type = 'video';
                 $record->duration = isset($evidence['duration']) ? intval($evidence['duration']) : 5;
                 
-                debug_log("Video saved as {$filename}");
+                debug_log("Video saved as {$filename} via File API");
             }
             
         } elseif (isset($evidence['image'])) {
@@ -196,22 +191,34 @@ foreach ($data['batch_data'] as $index => $evidence) {
                 }
                 
                 $filename = 'i_' . $courseid . '_' . $USER->id . '_' . time() . '_' . uniqid() . '.' . $image_type;
-                $filepath = $evidence_folder . $filename;
                 
-                if (file_put_contents($filepath, $image_binary) !== false) {
-                    $record->evidence_path = $filename;
-                    $record->evidence_type = 'image';
-                    debug_log("Image saved as {$filename}");
-                }
+                // Moodle File API
+                $file_record['filename'] = $filename;
+                $fs->create_file_from_string($file_record, $image_binary);
+
+                $record->evidence_path = $filename;
+                $record->evidence_type = 'image';
+                debug_log("Image saved as {$filename} via File API");
             }
         }
         
         if (isset($record->evidence_path)) {
             // Try to insert record
             try {
-                $DB->insert_record('block_ai_proctor', $record);
+                $record_id = $DB->insert_record('block_ai_proctor', $record);
+
+                // Now link file to correct itemid
+                $file = $fs->get_file($context->id, 'block_ai_proctor', 'evidence', 0, '/', $record->evidence_path);
+                if ($file) {
+                    // Update the itemid of the file to match the database record
+                    $fs->delete_area_files($context->id, 'block_ai_proctor', 'evidence', $record_id);
+                    $file_record['itemid'] = $record_id;
+                    $fs->create_file_from_storedfile($file_record, $file);
+                    $file->delete();
+                }
+
                 $uploaded_count++;
-                debug_log("Database record inserted successfully");
+                debug_log("Database record inserted successfully with ID {$record_id}");
             } catch (dml_exception $e) {
                 debug_log("Database error: " . $e->getMessage());
                 $errors[] = "Database error: " . $e->getMessage();
@@ -233,83 +240,6 @@ echo json_encode([
     'uploaded' => $uploaded_count,
     'errors' => $errors,
     'debug' => "Processed by user {$USER->id} at " . date('Y-m-d H:i:s')
-]);
-
-function determineSeverity($violation_type) {
-    $high = ['No Face', 'Talking', 'Multiple'];
-    $medium = ['Looking Down', 'Turning'];
-    
-    foreach ($high as $type) {
-        if (stripos($violation_type, $type) !== false) return 'high';
-    }
-    foreach ($medium as $type) {
-        if (stripos($violation_type, $type) !== false) return 'medium';
-    }
-    return 'low';
-}
-?>
-                continue;
-            }
-            
-            // Extract base64 data
-            if (preg_match('/^data:video\/(\w+);base64,(.*)$/', $video_data, $matches)) {
-                $video_base64 = $matches[2];
-                $video_binary = base64_decode($video_base64);
-                
-                if ($video_binary === false) {
-                    $errors[] = "Invalid video encoding";
-                    continue;
-                }
-                
-                $filename = 'v_' . $courseid . '_' . $USER->id . '_' . time() . '_' . uniqid() . '.webm';
-                $filepath = $evidence_folder . $filename;
-                
-                if (file_put_contents($filepath, $video_binary) === false) {
-                    $errors[] = "Failed to save video";
-                    continue;
-                }
-                
-                $record->evidence_path = $filename;
-                $record->evidence_type = 'video';
-                $record->duration = isset($evidence['duration']) ? intval($evidence['duration']) : 5;
-            }
-            
-        } elseif (isset($evidence['image'])) {
-            // Handle image evidence
-            if (preg_match('/^data:image\/(\w+);base64,(.*)$/', $evidence['image'], $matches)) {
-                $image_type = $matches[1];
-                $image_base64 = $matches[2];
-                $image_binary = base64_decode($image_base64);
-                
-                if ($image_binary === false) {
-                    continue;
-                }
-                
-                $filename = 'i_' . $courseid . '_' . $USER->id . '_' . time() . '_' . uniqid() . '.' . $image_type;
-                $filepath = $evidence_folder . $filename;
-                
-                if (file_put_contents($filepath, $image_binary) !== false) {
-                    $record->evidence_path = $filename;
-                    $record->evidence_type = 'image';
-                }
-            }
-        }
-        
-        if (isset($record->evidence_path)) {
-            $DB->insert_record('block_ai_proctor', $record);
-            $uploaded_count++;
-        }
-        
-    } catch (Exception $e) {
-        $errors[] = $e->getMessage();
-    }
-}
-
-http_response_code(200);
-echo json_encode([
-    'success' => true,
-    'uploaded' => $uploaded_count,
-    'errors' => $errors
 ]);
 
 function determineSeverity($violation_type) {

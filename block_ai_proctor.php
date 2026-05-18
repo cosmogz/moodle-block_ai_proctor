@@ -1,4 +1,12 @@
 <?php
+/**
+ * AI Proctor Block
+ *
+ * @package    block_ai_proctor
+ * @copyright  2024 Qigen
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -18,7 +26,7 @@
  * Block definition for AI Proctor.
  *
  * @package    block_ai_proctor
- * @copyright  2026 Your Name
+ * @copyright  2024 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -2087,11 +2095,18 @@ class block_ai_proctor extends block_base {
 
 <?php endif; ?>
 
-<?php 
+<?php
         $html = ob_get_contents();
         ob_end_clean();
         $this->content->text = $html;
         return $this->content;
     }
+
+    /**
+     * Define cron task execution for the block.
+     */
+    public function cron() {
+        mtrace('Running AI Proctor block cron...');
+        return true;
+    }
 }
-?>
