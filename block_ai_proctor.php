@@ -91,10 +91,10 @@ class block_ai_proctor extends block_base {
     <div style="display: flex; justify-content: space-between; align-items: center; color: white;">
         <div style="display: flex; align-items: center; gap: 8px;">
             <div id="status-pulse" style="width: 8px; height: 8px; background: #4ade80; border-radius: 50%; animation: pulse 2s infinite;"></div>
-            <span id="header-status" style="font-weight: 600; font-size: 13px;">Active</span>
+            <span id="header-status" style="font-weight: 600; font-size: 13px;"><?php echo get_string('active', 'block_ai_proctor'); ?></span>
         </div>
         <div style="background: rgba(255,255,255,0.2); padding: 4px 12px; border-radius: 20px; backdrop-filter: blur(10px);">
-            <span style="font-size: 11px; opacity: 0.9;">Strikes:</span>
+            <span style="font-size: 11px; opacity: 0.9;"><?php echo get_string('strikes', 'block_ai_proctor'); ?>:</span>
             <span id="header-strikes" style="font-weight: 700; font-size: 14px; margin-left: 4px;">0</span><span style="opacity: 0.7;">/5</span>
         </div>
     </div>
@@ -104,7 +104,7 @@ class block_ai_proctor extends block_base {
     <div style="text-align:center;">
         <form action="<?php echo $report_url; ?>" method="get" target="_blank">
             <input type="hidden" name="courseid" value="<?php echo $course_id; ?>">
-            <button type="submit" class="btn" style="width:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';">Command Center</button>
+            <button type="submit" class="btn" style="width:100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(102, 126, 234, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(102, 126, 234, 0.3)';"><?php echo get_string('command_center', 'block_ai_proctor'); ?></button>
         </form>
     </div>
 <?php else: ?>
@@ -426,7 +426,7 @@ class block_ai_proctor extends block_base {
 </style>
 
 <div id="click-blocker">
-    <div id="click-blocker-msg">⚠️ EXAM HIDDEN<br><span style="font-size:16px; font-weight:normal;">Face Lost. Return to continue.</span></div>
+    <div id="click-blocker-msg">⚠️ <?php echo get_string('exam_hidden', 'block_ai_proctor'); ?><br><span style="font-size:16px; font-weight:normal;"><?php echo get_string('face_lost', 'block_ai_proctor'); ?></span></div>
 </div>
 
 <!-- Intelligent Warning Overlay -->
@@ -434,7 +434,7 @@ class block_ai_proctor extends block_base {
     <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); text-align:center; max-width:600px; width:90%;">
         <div style="width:100px; height:100px; background:linear-gradient(135deg, #fbbf24, #f59e0b); border-radius:50%; margin:0 auto 24px; display:flex; align-items:center; justify-content:center; font-size:50px; box-shadow:0 20px 60px rgba(251,191,36,0.4); animation:pulse 2s infinite;">⚠️</div>
         
-        <h2 style="color:white; font-size:28px; font-weight:700; margin-bottom:16px;">Position Adjustment Required</h2>
+        <h2 style="color:white; font-size:28px; font-weight:700; margin-bottom:16px;"><?php echo get_string('position_required', 'block_ai_proctor'); ?></h2>
         
         <div id="warning-message" style="color:#cbd5e1; font-size:18px; margin-bottom:32px; line-height:1.6;"></div>
         
@@ -446,7 +446,7 @@ class block_ai_proctor extends block_base {
         
         <div style="display:flex; align-items:center; justify-content:center; gap:12px; color:#64748b; font-size:14px;">
             <div style="width:8px; height:8px; background:#fbbf24; border-radius:50%; animation:pulse 2s infinite;"></div>
-            <span id="warning-timer">You have 8 seconds to adjust your position</span>
+            <span id="warning-timer"><?php echo get_string('warning_timer', 'block_ai_proctor'); ?></span>
         </div>
         
         <div id="warning-countdown" style="margin-top:20px; font-size:48px; font-weight:700; color:#fbbf24;">8</div>
@@ -455,8 +455,8 @@ class block_ai_proctor extends block_base {
 
 <div id="ai-shield">
     <div id="shield-icon">🛡️</div>
-    <div id="shield-title">AI Proctor System</div>
-    <div id="shield-status">Initializing secure monitoring...</div>
+    <div id="shield-title"><?php echo get_string('shield_title', 'block_ai_proctor'); ?></div>
+    <div id="shield-status"><?php echo get_string('shield_status_init', 'block_ai_proctor'); ?></div>
     
     <!-- Progress Bar -->
     <div style="width: 480px; background: rgba(255,255,255,0.1); height: 8px; border-radius: 10px; margin: 16px 0; overflow: hidden;">
@@ -467,31 +467,31 @@ class block_ai_proctor extends block_base {
     <div id="init-steps" style="width: 480px; text-align: left; font-size: 13px; color: #94a3b8; margin-bottom: 20px;">
         <div style="display: flex; align-items: center; padding: 6px 0;">
             <span id="step1-icon" style="margin-right: 8px;">⏳</span>
-            <span id="step1-text">Checking system requirements...</span>
+            <span id="step1-text"><?php echo get_string('step_system', 'block_ai_proctor'); ?></span>
         </div>
         <div style="display: flex; align-items: center; padding: 6px 0;">
             <span id="step2-icon" style="margin-right: 8px;">⏳</span>
-            <span id="step2-text">Checking camera support...</span>
+            <span id="step2-text"><?php echo get_string('step_camera', 'block_ai_proctor'); ?></span>
         </div>
         <div style="display: flex; align-items: center; padding: 6px 0;">
             <span id="step3-icon" style="margin-right: 8px;">⏳</span>
-            <span id="step3-text">Requesting camera access...</span>
+            <span id="step3-text"><?php echo get_string('step_access', 'block_ai_proctor'); ?></span>
         </div>
         <div style="display: flex; align-items: center; padding: 6px 0;">
             <span id="step4-icon" style="margin-right: 8px;">⏳</span>
-            <span id="step4-text">Loading AI model...</span>
+            <span id="step4-text"><?php echo get_string('step_model', 'block_ai_proctor'); ?></span>
         </div>
         <div style="display: flex; align-items: center; padding: 6px 0;">
             <span id="step5-icon" style="margin-right: 8px;">⏳</span>
-            <span id="step5-text">Loading AI model...</span>
+            <span id="step5-text"><?php echo get_string('step_model', 'block_ai_proctor'); ?></span>
         </div>
         <div style="display: flex; align-items: center; padding: 6px 0;">
             <span id="step6-icon" style="margin-right: 8px;">⏳</span>
-            <span id="step6-text">Initializing face detection...</span>
+            <span id="step6-text"><?php echo get_string('step_face', 'block_ai_proctor'); ?></span>
         </div>
         <div style="display: flex; align-items: center; padding: 6px 0;">
             <span id="step7-icon" style="margin-right: 8px;">⏳</span>
-            <span id="step7-text">Environment scan required...</span>
+            <span id="step7-text"><?php echo get_string('step_scan', 'block_ai_proctor'); ?></span>
         </div>
     </div>
     
@@ -501,7 +501,7 @@ class block_ai_proctor extends block_base {
     
     <div class="shield-footer">
         <div class="shield-footer-dot"></div>
-        <span id="shield-footer-text">Secure Connection Established</span>
+        <span id="shield-footer-text"><?php echo get_string('shield_connection', 'block_ai_proctor'); ?></span>
     </div>
 </div>
 
@@ -511,11 +511,11 @@ class block_ai_proctor extends block_base {
     <div id="hud-content">
         <div class="status-grid">
             <div class="status-card">
-                <div class="status-label">Status</div>
+                <div class="status-label"><?php echo get_string('status', 'block_ai_proctor'); ?></div>
                 <div class="status-value" id="debug-mode">NORMAL</div>
             </div>
             <div class="status-card">
-                <div class="status-label">Risk Level</div>
+                <div class="status-label"><?php echo get_string('risk_level', 'block_ai_proctor'); ?></div>
                 <div class="status-value" id="debug-suspicion">0%</div>
             </div>
         </div>
@@ -529,7 +529,7 @@ class block_ai_proctor extends block_base {
         
         <div class="metrics-section">
             <div class="metric-row">
-                <span class="metric-label">Eye Tracking</span>
+                <span class="metric-label"><?php echo get_string('eye_tracking', 'block_ai_proctor'); ?></span>
                 <span class="metric-value" id="val-eye">0.00</span>
             </div>
             <div class="metric-row">
@@ -542,7 +542,7 @@ class block_ai_proctor extends block_base {
         <ul id="violation-log"></ul>
         
         <div style="text-align:center; color:#64748b; font-size:9px; margin-top:12px; opacity: 0.7;">Optimized • 10 FPS • Encrypted</div>
-        <div style="text-align:center; color:#64748b; font-size:8px; margin-top:8px; opacity: 0.5; border-top: 1px solid rgba(255,255,255,0.05); padding-top:8px;">Powered by Qigen</div>
+        <div style="text-align:center; color:#64748b; font-size:8px; margin-top:8px; opacity: 0.5; border-top: 1px solid rgba(255,255,255,0.05); padding-top:8px;"><?php echo get_string('powered_by', 'block_ai_proctor'); ?></div>
     </div>
 </div>
 
