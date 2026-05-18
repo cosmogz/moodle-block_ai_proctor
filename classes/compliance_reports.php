@@ -1,15 +1,18 @@
 <?php
+namespace block_ai_proctor;
 /**
  * Compliance Reports Generator
  * Professional PDF reports for accreditation and audits
  * 
  * @package block_ai_proctor
- * @copyright 2026 AI Proctor
+ * @copyright 2024 Qigen
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(__DIR__ . '/../../config.php');
+defined('MOODLE_INTERNAL') || die();
 require_once($CFG->libdir . '/pdflib.php');
+defined('MOODLE_INTERNAL') || die();
 
 /**
  * Compliance Report Generator

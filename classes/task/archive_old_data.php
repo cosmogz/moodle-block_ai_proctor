@@ -1,4 +1,5 @@
 <?php
+namespace block_ai_proctor\task;
 /**
  * AI Proctor Data Archiving Scheduled Task
  * 
@@ -6,7 +7,7 @@
  * and generate long-term compliance reports.
  * 
  * @package    block_ai_proctor
- * @copyright  2025 Medwax Corporation Africa Ltd.
+ * @copyright  2024 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -405,4 +406,3 @@ class archive_old_data extends \core\task\scheduled_task {
         debugging($message, DEBUG_NORMAL);
     }
 }
-?>

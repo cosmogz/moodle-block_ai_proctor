@@ -7,7 +7,7 @@
  * system performance and data integrity.
  * 
  * @package    block_ai_proctor
- * @copyright  2025 Medwax Corporation Africa Ltd.
+ * @copyright  2024 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -72,4 +72,3 @@ $tasks = array(
         'disabled' => 1                    // Disabled by default (enterprise feature)
     )
 );
-?>

@@ -542,7 +542,7 @@ class block_ai_proctor extends block_base {
         <ul id="violation-log"></ul>
         
         <div style="text-align:center; color:#64748b; font-size:9px; margin-top:12px; opacity: 0.7;">Optimized • 10 FPS • Encrypted</div>
-        <div style="text-align:center; color:#64748b; font-size:8px; margin-top:8px; opacity: 0.5; border-top: 1px solid rgba(255,255,255,0.05); padding-top:8px;">Powered by Medwax Corporation Africa Ltd.</div>
+        <div style="text-align:center; color:#64748b; font-size:8px; margin-top:8px; opacity: 0.5; border-top: 1px solid rgba(255,255,255,0.05); padding-top:8px;">Powered by Qigen</div>
     </div>
 </div>
 

@@ -1,4 +1,12 @@
 <?php
+/**
+ * AI Proctor Block
+ *
+ * @package    block_ai_proctor
+ * @copyright  2024 Qigen
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'AI Proctor';
@@ -88,4 +96,3 @@ $string['privacy:path:sessions'] = 'AI Proctor Monitoring Sessions';
 $string['privacy:path:config'] = 'AI Proctor Configuration Settings';
 $string['privacy:path:evidence_files'] = 'Evidence Files';
 $string['privacy:metadata:evidence_file'] = 'Metadata about captured evidence files including violation context and AI analysis results.';
-?>

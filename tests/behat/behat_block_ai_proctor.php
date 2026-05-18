@@ -4,7 +4,7 @@
  *
  * @package    block_ai_proctor
  * @category   test
- * @copyright  2025 Medwax Corporation Africa Ltd.
+ * @copyright  2025 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 

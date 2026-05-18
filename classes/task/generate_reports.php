@@ -1,4 +1,5 @@
 <?php
+namespace block_ai_proctor\task;
 /**
  * AI Proctor Reports Generation Scheduled Task
  * 
@@ -6,7 +7,7 @@
  * and system health checks for the AI Proctor system.
  * 
  * @package    block_ai_proctor
- * @copyright  2025 Medwax Corporation Africa Ltd.
+ * @copyright  2024 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -358,4 +359,3 @@ class generate_reports extends \core\task\scheduled_task {
         debugging($message, DEBUG_NORMAL);
     }
 }
-?>

@@ -1,4 +1,5 @@
 <?php
+namespace block_ai_proctor\task;
 /**
  * AI Proctor Evidence Cleanup Scheduled Task
  * 
@@ -7,7 +8,7 @@
  * performance and comply with data retention policies.
  * 
  * @package    block_ai_proctor
- * @copyright  2025 Medwax Corporation Africa Ltd.
+ * @copyright  2024 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -390,4 +391,3 @@ class cleanup_old_evidence extends \core\task\scheduled_task {
         debugging($message, DEBUG_NORMAL);
     }
 }
-?>

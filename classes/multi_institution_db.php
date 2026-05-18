@@ -1,10 +1,11 @@
 <?php
+namespace block_ai_proctor;
 /**
  * Multi-Institution Management Database Schema
  * Centralized system for managing multiple universities
  * 
  * @package block_ai_proctor
- * @copyright 2026 AI Proctor
+ * @copyright 2024 Qigen
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
