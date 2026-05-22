@@ -15,6 +15,13 @@ function xmldb_block_ai_proctor_upgrade($oldversion) {
 
     if ($oldversion < 2025012201) {
         
+                // Migrate 'timestamp' field to 'timecreated' to fix db error
+        $old_field = new xmldb_field('timestamp', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+        if ($dbman->field_exists($table, $old_field)) {
+            $new_field = new xmldb_field('timecreated', XMLDB_TYPE_INTEGER, '10', null, XMLDB_NOTNULL, null, null);
+            $dbman->rename_field($table, $old_field, 'timecreated');
+        }
+
         // Define main evidence table
         $table = new xmldb_table('block_ai_proctor');
         

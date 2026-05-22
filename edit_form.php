@@ -9,6 +9,9 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+global $CFG;
+require_once($CFG->dirroot . '/blocks/edit_form.php');
+
 class block_ai_proctor_edit_form extends block_edit_form {
     protected function specific_definition($mform) {
         $mform->addElement('header', 'config', get_string('settings', 'block_ai_proctor'));

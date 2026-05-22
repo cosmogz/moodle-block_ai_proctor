@@ -165,15 +165,24 @@ foreach ($data['batch_data'] as $index => $evidence) {
                 
                 $filename = 'v_' . $courseid . '_' . $USER->id . '_' . time() . '_' . uniqid() . '.webm';
                 
-                // Moodle File API
-                $file_record['filename'] = $filename;
-                $fs->create_file_from_string($file_record, $video_binary);
-                
                 $record->evidence_path = $filename;
                 $record->evidence_type = 'video';
                 $record->duration = isset($evidence['duration']) ? intval($evidence['duration']) : 5;
                 
-                debug_log("Video saved as {$filename} via File API");
+                try {
+                    $record_id = $DB->insert_record('block_ai_proctor', $record);
+
+                    // Moodle File API
+                    $file_record['itemid'] = $record_id;
+                    $file_record['filename'] = $filename;
+                    $fs->create_file_from_string($file_record, $video_binary);
+
+                    $uploaded_count++;
+                    debug_log("Database record inserted and Video saved as {$filename} via File API");
+                } catch (dml_exception $e) {
+                    debug_log("Database error: " . $e->getMessage());
+                    $errors[] = "Database error: " . $e->getMessage();
+                }
             }
             
         } elseif (isset($evidence['image'])) {
@@ -192,36 +201,23 @@ foreach ($data['batch_data'] as $index => $evidence) {
                 
                 $filename = 'i_' . $courseid . '_' . $USER->id . '_' . time() . '_' . uniqid() . '.' . $image_type;
                 
-                // Moodle File API
-                $file_record['filename'] = $filename;
-                $fs->create_file_from_string($file_record, $image_binary);
-
                 $record->evidence_path = $filename;
                 $record->evidence_type = 'image';
-                debug_log("Image saved as {$filename} via File API");
-            }
-        }
-        
-        if (isset($record->evidence_path)) {
-            // Try to insert record
-            try {
-                $record_id = $DB->insert_record('block_ai_proctor', $record);
 
-                // Now link file to correct itemid
-                $file = $fs->get_file($context->id, 'block_ai_proctor', 'evidence', 0, '/', $record->evidence_path);
-                if ($file) {
-                    // Update the itemid of the file to match the database record
-                    $fs->delete_area_files($context->id, 'block_ai_proctor', 'evidence', $record_id);
+                try {
+                    $record_id = $DB->insert_record('block_ai_proctor', $record);
+
+                    // Moodle File API
                     $file_record['itemid'] = $record_id;
-                    $fs->create_file_from_storedfile($file_record, $file);
-                    $file->delete();
-                }
+                    $file_record['filename'] = $filename;
+                    $fs->create_file_from_string($file_record, $image_binary);
 
-                $uploaded_count++;
-                debug_log("Database record inserted successfully with ID {$record_id}");
-            } catch (dml_exception $e) {
-                debug_log("Database error: " . $e->getMessage());
-                $errors[] = "Database error: " . $e->getMessage();
+                    $uploaded_count++;
+                    debug_log("Database record inserted and Image saved as {$filename} via File API");
+                } catch (dml_exception $e) {
+                    debug_log("Database error: " . $e->getMessage());
+                    $errors[] = "Database error: " . $e->getMessage();
+                }
             }
         }
         
