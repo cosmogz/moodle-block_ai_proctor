@@ -1,4 +1,12 @@
 <?php
+/**
+ * AI Proctor Block
+ *
+ * @package    block_ai_proctor
+ * @copyright  2024 Qigen
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ */
+
 require_once('../../config.php');
 
 global $DB, $USER, $CFG, $PAGE, $OUTPUT;
@@ -40,7 +48,7 @@ if (!$records) {
 
         // --- THE FIX IS HERE ---
         // We point to image.php which securely fetches the file from moodledata
-        $img_url = $CFG->wwwroot . '/blocks/ai_proctor/image.php?file=' . $r->imagedata;
+        $img_url = $CFG->wwwroot . '/blocks/ai_proctor/image.php?courseid=' . $courseid . '&itemid=' . $r->id . '&file=' . $r->evidence_path;
         
         $time = userdate($r->timecreated, '%H:%M:%S');
         $color = ($r->message == 'No Face') ? 'text-danger' : 'text-warning';
@@ -66,4 +74,3 @@ if (!$records) {
 }
 
 echo $OUTPUT->footer();
-?>

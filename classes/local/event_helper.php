@@ -6,9 +6,9 @@
  * Centralizes event creation to ensure consistent logging and compliance tracking.
  * 
  * @package    block_ai_proctor
- * @copyright  2025 Medwax Corporation Africa Ltd.
+ * @copyright  2024 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     Medwax Corporation Africa Ltd.
+ * @author     Qigen
  * @link       https://medwax.com
  */
 

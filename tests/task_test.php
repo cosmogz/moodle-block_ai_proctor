@@ -4,7 +4,7 @@
  *
  * @package    block_ai_proctor
  * @category   test
- * @copyright  2025 Medwax Corporation Africa Ltd.
+ * @copyright  2025 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
@@ -63,7 +63,7 @@ class tasks_test extends \advanced_testcase {
         $this->assertTrue($DB->record_exists('block_ai_proctor', ['id' => $recentId]));
         
         // Run cleanup task
-        $task = new cleanup_old_evidence();
+        $task = new \block_ai_proctor\task\cleanup_old_evidence();
         $task->execute();
         
         // Verify old evidence was cleaned up but recent evidence remains
@@ -102,7 +102,7 @@ class tasks_test extends \advanced_testcase {
         $DB->insert_record('block_ai_proctor', $record2);
         
         // Run report generation task
-        $task = new generate_reports();
+        $task = new \block_ai_proctor\task\generate_reports();
         
         // Test that task can execute without errors
         try {
@@ -153,7 +153,7 @@ class tasks_test extends \advanced_testcase {
         $this->assertTrue($DB->record_exists('block_ai_proctor_sessions', ['id' => $recentSessionId]));
         
         // Run archive task
-        $task = new archive_old_data();
+        $task = new \block_ai_proctor\task\archive_old_data();
         $task->execute();
         
         // Verify old session was archived/removed but recent session remains
@@ -166,17 +166,17 @@ class tasks_test extends \advanced_testcase {
      */
     public function test_task_configuration() {
         // Test cleanup task configuration
-        $cleanupTask = new cleanup_old_evidence();
+        $cleanupTask = new \block_ai_proctor\task\cleanup_old_evidence();
         $this->assertNotEmpty($cleanupTask->get_name());
         $this->assertTrue($cleanupTask instanceof \core\task\scheduled_task);
         
         // Test reports task configuration
-        $reportsTask = new generate_reports();
+        $reportsTask = new \block_ai_proctor\task\generate_reports();
         $this->assertNotEmpty($reportsTask->get_name());
         $this->assertTrue($reportsTask instanceof \core\task\scheduled_task);
         
         // Test archive task configuration
-        $archiveTask = new archive_old_data();
+        $archiveTask = new \block_ai_proctor\task\archive_old_data();
         $this->assertNotEmpty($archiveTask->get_name());
         $this->assertTrue($archiveTask instanceof \core\task\scheduled_task);
     }
@@ -202,7 +202,7 @@ class tasks_test extends \advanced_testcase {
         $recordId = $DB->insert_record('block_ai_proctor', $record);
         
         // Run cleanup task
-        $task = new cleanup_old_evidence();
+        $task = new \block_ai_proctor\task\cleanup_old_evidence();
         $task->execute();
         
         // Verify record was removed
@@ -237,7 +237,7 @@ class tasks_test extends \advanced_testcase {
         }
         
         // Run report generation
-        $task = new generate_reports();
+        $task = new \block_ai_proctor\task\generate_reports();
         
         // Capture any output during task execution
         ob_start();
@@ -253,7 +253,7 @@ class tasks_test extends \advanced_testcase {
      */
     public function test_tasks_handle_empty_database() {
         // Test cleanup with no data
-        $cleanupTask = new cleanup_old_evidence();
+        $cleanupTask = new \block_ai_proctor\task\cleanup_old_evidence();
         try {
             $cleanupTask->execute();
             $this->assertTrue(true);
@@ -262,7 +262,7 @@ class tasks_test extends \advanced_testcase {
         }
         
         // Test reports with no data
-        $reportsTask = new generate_reports();
+        $reportsTask = new \block_ai_proctor\task\generate_reports();
         try {
             $reportsTask->execute();
             $this->assertTrue(true);
@@ -271,7 +271,7 @@ class tasks_test extends \advanced_testcase {
         }
         
         // Test archive with no data
-        $archiveTask = new archive_old_data();
+        $archiveTask = new \block_ai_proctor\task\archive_old_data();
         try {
             $archiveTask->execute();
             $this->assertTrue(true);

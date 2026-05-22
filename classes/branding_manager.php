@@ -1,14 +1,16 @@
 <?php
+namespace block_ai_proctor;
 /**
  * White-Label Branding System
  * Custom theming and branding for institutions
  * 
  * @package block_ai_proctor
- * @copyright 2026 AI Proctor
+ * @copyright 2024 Qigen
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 require_once(__DIR__ . '/../../config.php');
+defined('MOODLE_INTERNAL') || die();
 
 class branding_manager {
     

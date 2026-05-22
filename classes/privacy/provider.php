@@ -7,9 +7,9 @@
  * to privacy regulations and data protection requirements.
  * 
  * @package    block_ai_proctor
- * @copyright  2025 Medwax Corporation Africa Ltd.
+ * @copyright  2025 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @author     Medwax Corporation Africa Ltd.
+ * @author     Qigen
  * @link       https://medwax.com
  */
 

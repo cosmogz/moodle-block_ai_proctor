@@ -3,7 +3,7 @@
  * AI Proctor Block - Version Information
  *
  * @package    block_ai_proctor
- * @copyright  2024 AI Proctor
+ * @copyright  2024 Qigen
  * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
